@@ -223,6 +223,32 @@ tr.hidden-by-filter { display: none; }
 }
 .facet-clear:hover { color: var(--accent); }
 
+/* Facet collapse toggle */
+.facet-toggle {
+  display: none; /* shown only on mobile */
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+}
+.facet-toggle .badge {
+  background: rgba(255,255,255,0.25);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 11px;
+  margin-left: 4px;
+}
+.facet-toggle .caret { float: right; transition: transform 0.15s; }
+.facet-bar.collapsed .facet-toggle .caret { transform: rotate(-90deg); }
+.facet-bar.collapsed .facet-body { display: none; }
+
 /* Custom tooltip for facet chips (replaces native title) */
 .facet-chip[data-tip] { position: relative; }
 .facet-chip[data-tip]:hover::before,
@@ -295,6 +321,10 @@ tr.hidden-by-filter { display: none; }
   table { font-size: 12.5px; }
   th, td { padding: 5px 7px; white-space: nowrap; }
   th { padding-right: 18px; }
+  /* Facet toggle shown on mobile */
+  .facet-toggle { display: block; margin-bottom: 0.4em; }
+  .facet-body { padding-top: 0.3em; }
+
   /* On mobile the scroll wrapper has extended fade hint */
   .table-scroll::after {
     content: "swipe →";

@@ -181,6 +181,32 @@
       clearRow.style.textAlign = 'right';
       clearRow.appendChild(clear);
       bar.appendChild(clearRow);
+
+      // Collapsible on mobile: wrap chips in a collapsible body, add toggle header
+      var toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'facet-toggle';
+      function updateToggleLabel() {
+        var active = bar.querySelectorAll('.facet-chip.active').length;
+        toggleBtn.innerHTML = 'Filters' + (active > 0 ? ' <span class="badge">' + active + '</span>' : '') + ' <span class="caret">▾</span>';
+      }
+      // Wrap everything after the toggle button in a .facet-body div so we can collapse it
+      var body = document.createElement('div');
+      body.className = 'facet-body';
+      while (bar.firstChild) body.appendChild(bar.firstChild);
+      bar.appendChild(toggleBtn);
+      bar.appendChild(body);
+      updateToggleLabel();
+      toggleBtn.addEventListener('click', function() {
+        bar.classList.toggle('collapsed');
+      });
+      // Observe chip activations to refresh badge count
+      bar.addEventListener('click', function(e) {
+        if (e.target.closest('.facet-chip')) setTimeout(updateToggleLabel, 0);
+      });
+      // Start collapsed on mobile, open on desktop (CSS handles via media query + default class)
+      if (window.matchMedia('(max-width:720px)').matches) bar.classList.add('collapsed');
+
       table.parentNode.insertBefore(bar, table);
     }
 
