@@ -219,13 +219,17 @@
           return sortAsc ? ta.localeCompare(tb) : tb.localeCompare(ta);
         });
       }
-      // Render (capped)
+      // Render (capped). data-label on each cell enables card-layout on mobile.
       var toRender = matches.slice(0, lazyRenderCap);
       var html = '';
       for (var j = 0; j < toRender.length; j++) {
         var r = toRender[j];
         html += '<tr>';
-        for (var k = 0; k < r.length; k++) html += '<td>' + escapeHtml(String(r[k] || '')) + '</td>';
+        for (var k = 0; k < r.length; k++) {
+          html += '<td data-label="' + escapeHtml(headerNames[k] || '') + '">'
+               + escapeHtml(String(r[k] || ''))
+               + '</td>';
+        }
         html += '</tr>';
       }
       tbody.innerHTML = html;

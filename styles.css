@@ -392,24 +392,56 @@ tr.hidden-by-filter { display: none; }
   }
   .facet-clear { font-size: 13px; padding: 6px 0; display: inline-block; }
 
-  /* Tables: slightly tighter but still readable */
-  table { font-size: 12.5px; }
-  th, td { padding: 5px 7px; white-space: nowrap; }
-  th { padding-right: 18px; }
   /* Facet toggle shown on mobile */
   .facet-toggle { display: block; margin-bottom: 0.4em; }
   .facet-body { padding-top: 0.3em; }
 
-  /* On mobile the scroll wrapper has extended fade hint */
-  .table-scroll::after {
-    content: "swipe →";
-    position: sticky;
-    right: 4px;
-    bottom: 4px;
-    font-size: 10px;
-    color: var(--muted);
-    opacity: 0.5;
+  /* ===== MOBILE: CARD-LAYOUT TABLES (no horizontal scroll) =====
+     Each row renders as a stacked block; each cell shows its column
+     header (from data-label) as a small tag above the value. */
+  .table-scroll { overflow-x: visible; background: none; }
+  .table-scroll::after { display: none; }
+  table {
+    display: block;
+    box-shadow: none;
+    background: none;
+    font-size: 13.5px;
+    margin: 0;
   }
+  thead { display: none; }
+  tbody { display: block; }
+  tr {
+    display: block;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin: 0 0 8px 0;
+    padding: 8px 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  tr:nth-child(even) td { background: transparent; }
+  td {
+    display: block;
+    padding: 5px 0;
+    border: none;
+    border-bottom: 1px dashed #eee;
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: top;
+  }
+  td:last-child { border-bottom: none; }
+  td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+  /* Note: only the Master Browser has data-label attrs. Static markdown
+     tables (stripped in build.py) no longer render, so no special case. */
 
   /* Suppress phantom-hover tooltips from sticky touches */
   .facet-chip[data-tip]:hover::before,
