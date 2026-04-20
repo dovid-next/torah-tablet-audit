@@ -2,9 +2,7 @@
 
 Data foundation for the Torah Tablet project: a Sefaria fork shipping offline on a Charedi-market tablet.
 
-- **[View the audit site](https://torah-tablet-audit.pages.dev)** (Cloudflare Pages)
-- Source markdown: [`audit.md`](./audit.md)
-- Rendered HTML: [`index.html`](./index.html)
+**Live site:** https://torah-tablet-audit.pages.dev
 
 ## What's in here
 
@@ -16,18 +14,50 @@ Data foundation for the Torah Tablet project: a Sefaria fork shipping offline on
 - Master browsable table with facet filters and sortable columns
 - Risk register, update/support model, cost template
 
-## Updating
+## Editing
 
-Regenerate HTML from the markdown source:
+All content lives in [`audit.md`](./audit.md). Edit the markdown — Cloudflare Pages rebuilds the site on every push to `main`.
+
+You can edit directly in the GitHub web UI or locally:
 
 ```bash
-python build.py
-git add index.html audit.md
+git pull
+# edit audit.md
+git add audit.md
 git commit -m "update audit"
 git push
 ```
 
-Cloudflare Pages auto-deploys on push to `main`.
+No local build needed — Cloudflare handles it.
+
+## Local preview (optional)
+
+```bash
+pip install -r requirements.txt
+python build.py
+# open index.html in a browser
+```
+
+## How the build works
+
+Cloudflare Pages runs `pip install -r requirements.txt && python build.py` on each push. `build.py`:
+1. Reads `audit.md`
+2. Renders markdown to HTML with sortable/filterable tables
+3. Injects the Master Versions Browser from `versions_full.json`
+4. Wraps with styles from `styles.css` and scripts from `app.js`
+5. Writes `index.html` which Cloudflare serves.
+
+## Repo contents
+
+```
+audit.md              # Source markdown — the only thing you edit
+build.py              # Regenerates index.html
+requirements.txt      # Python deps for Cloudflare build
+styles.css            # Styling
+app.js                # Facet filtering + sort
+versions_full.json    # Text version metadata (for master browser)
+books.json            # Sefaria export index (for category lookup)
+```
 
 ## Data provenance
 
