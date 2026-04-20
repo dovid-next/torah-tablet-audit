@@ -206,3 +206,40 @@ tr.hidden-by-filter { display: none; }
   text-decoration: underline;
 }
 .facet-clear:hover { color: var(--accent); }
+
+/* Custom tooltip for facet chips (replaces native title) */
+.facet-chip[data-tip] { position: relative; }
+.facet-chip[data-tip]:hover::before,
+.facet-chip[data-tip]:hover::after {
+  pointer-events: none;
+  position: absolute;
+  z-index: 200;
+}
+.facet-chip[data-tip]:hover::before {
+  content: attr(data-tip);
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  white-space: normal;
+  width: max-content;
+  max-width: 340px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  text-align: left;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.facet-chip[data-tip]:hover::after {
+  content: "";
+  left: 50%;
+  bottom: calc(100% + 2px);
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #222;
+}
