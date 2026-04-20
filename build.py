@@ -16,7 +16,9 @@ import markdown, os, re, datetime, json, html as htmllib, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC_MD = os.path.join(HERE, 'audit.md')
-DST_HTML = os.path.join(HERE, 'index.html')
+DST_DIR = os.path.join(HERE, 'public')
+os.makedirs(DST_DIR, exist_ok=True)
+DST_HTML = os.path.join(DST_DIR, 'index.html')
 VERSIONS_JSON = os.path.join(HERE, 'versions_full.json')
 BOOKS_JSON = os.path.join(HERE, 'books.json')
 
