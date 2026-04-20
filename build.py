@@ -110,15 +110,18 @@ if os.path.exists(VERSIONS_JSON) and os.path.exists(BOOKS_JSON):
         ])
     master_data_json = json.dumps(master_rows, ensure_ascii=False, separators=(',', ':'))
     master_table = (
-        '<h2 id="master-browser">Master Versions Browser</h2>\n'
-        f'<p>All {len(versions):,} text versions. Use facet chips above the table to filter by Grade, Status, Category, or Language. Click column headers to sort.</p>\n'
-        '<p style="color:#666; font-size:13px;"><em>Common queries: click <code>BLOCKED-NC</code> to see all NC versions. Add <code>Talmud</code> to narrow. Click <code>AUDIT-NEEDED</code> + grade <code>?</code> for the priority audit pile.</em></p>\n'
+        '<section id="browser">\n'
+        f'<p class="browser-lead">Filter the Sefaria library across {len(versions):,} text versions. '
+        'Tap a chip to narrow results. Each chip has a hover description — tap once on mobile to read, tap again to apply.</p>\n'
         '<table class="lazy-table" data-source="master-data">'
         '<thead><tr>'
         '<th>Title</th><th>Category</th><th>Language</th><th>Grade</th>'
         '<th>Status</th><th>License</th><th>Publisher signal</th><th>Version title</th>'
         '</tr></thead><tbody></tbody></table>\n'
         '<script id="master-data" type="application/json">' + master_data_json + '</script>\n'
+        '</section>\n'
+        '<h2 id="notes" style="margin-top:3rem;">Audit notes &amp; context</h2>\n'
+        '<p class="notes-intro" style="color:#666;">The prose below is the analysis that produced the filters above: grading rubric, license definitions, coverage-gap analysis, core-seforim audit, storage numbers, risk register, user-journey walkthroughs. Every table that was here has been replaced by the interactive browser above.</p>\n'
     )
 
 html_body = markdown.markdown(
@@ -127,15 +130,14 @@ html_body = markdown.markdown(
     extension_configs={'toc': {'permalink': False, 'toc_depth': '2-3'}},
 )
 
-# ===== Strip all tables from markdown-rendered HTML =====
-# The Master Versions Browser (inserted separately below) is the only live
-# table. Other tables in audit.md are redundant with it and have been
-# demoted to supporting prose — any numbers a reader needs are derivable
-# by filtering the master browser.
+# ===== Strip all tables from markdown-rendered HTML (silently) =====
+# The Master Versions Browser (inserted at top) is the only live table.
+# Other tables in audit.md are redundant. Remove them cleanly — prose
+# around them serves as supporting context.
 stripped_count = [0]
 def _drop_table(m):
     stripped_count[0] += 1
-    return '<p class="stripped-table-note"><em>[Table removed — filter the Master Versions Browser above for live data.]</em></p>'
+    return ''
 html_body = re.sub(r'<table\b[^>]*>.*?</table>', _drop_table, html_body, flags=re.DOTALL)
 print(f'Stripped {stripped_count[0]} redundant tables from markdown content.')
 

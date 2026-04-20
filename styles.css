@@ -216,15 +216,32 @@ table th:hover { background: #d7e4f1; }
 .table-filter:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
 tr.hidden-by-filter { display: none; }
 
-/* Note left in place of stripped tables from audit.md */
-.stripped-table-note {
-  color: var(--muted);
-  font-size: 12px;
-  padding: 4px 10px;
-  margin: 0.4em 0;
-  border-left: 2px solid var(--border);
-  background: rgba(0,0,0,0.02);
+/* Hero filter section: the PRIMARY interface of the page */
+#browser {
+  margin: 1em 0 2em 0;
 }
+.browser-lead {
+  font-size: 15px;
+  color: #333;
+  margin: 0 0 0.8em 0;
+}
+/* Make the facet bar feel like the hero UI element */
+#browser .facet-bar {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9em 1em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  font-size: 13px;
+}
+#browser .facet-label { min-width: 110px; font-size: 11px; }
+#browser .facet-chip {
+  font-size: 12.5px;
+  padding: 4px 12px;
+}
+/* Style notes section so it feels secondary */
+#notes { color: var(--muted); font-size: 1.35rem; }
+.notes-intro { font-size: 14px; margin-bottom: 1.5em; }
 
 /* Lazy-table status line (shown above master browser) */
 .lazy-status {
