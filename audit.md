@@ -4,14 +4,87 @@ Generated from live Sefaria API on 2026-04-20. Covers 6453 unique titles across 
 
 ## Charedi Acceptability Grade
 
-| Grade | Meaning | Examples |
-|---|---|---|
-| **1** | Charedi mainstream — ships without objection | Artscroll, Chabad/Kehot, Feldheim, Metsudah, Machon Mamre, classical Vilna/Warsaw editions, all Hebrew/Aramaic source texts |
-| **2** | Orthodox / Modern-Orthodox / Religious-Zionist — acceptable to most Charedim but may need haskama check | Koren, Maggid, OU Press, Moznaim/Touger, Har Bracha, Rav Kook world |
-| **3** | Academic-Orthodox or uneven quality — tolerated by some, rejected by many Charedim | Steinsaltz/Davidson, Soncino, Sefaria community translations, Wikisource |
-| **4** | Non-Orthodox Jewish — rejected by Charedi market | JPS, Reconstructionist, Reform, JTS/HUC |
-| **5** | Non-Jewish / critical academic | Christian translations, Septuagint, bible-criticism scholars |
-| **?** | Unmatched — needs manual review | Anything without a recognized publisher fingerprint |
+Every text version in Sefaria has a publisher fingerprint (imprint, translator, source URL) that signals its likely reception by the Charedi market. These fingerprints roll up into a 1-to-5 scale, with `?` for anything unmatched. Grades are **advisory**, not halachic — they represent a reasonable first-pass classification that rabbinic advisors can override per title.
+
+<details>
+<summary><strong>Grade 1 — Charedi mainstream</strong></summary>
+
+Ships without objection in virtually any Charedi community. Covers the standard yeshivish/Chasidish seforim world plus the classical corpus:
+
+- **Artscroll / Mesorah Publications** — the American Charedi translation standard
+- **Chabad / Kehot / Sichos in English / Merkos** — universal acceptance in Lubavitch, broadly respected outside
+- **Feldheim** — Charedi publisher, dominant in the English-language Orthodox market
+- **Metsudah** — frum classroom standard for Chumash with Targum
+- **Machon Mamre** — Public Domain Hebrew typesetting project, faithful to traditional masoretic text
+- **Breslov / Torat Emet** — Chasidic translations widely used in those communities
+- **Classical Vilna/Warsaw printed editions** — the pre-20th-century standard typeset editions in the public domain
+- **All unattributed Hebrew/Aramaic source texts in the public domain** — the Gemara itself, Rashi, Tosafos, Rambam, Tur, Shulchan Aruch, etc. These are the bedrock of the library and universally accepted.
+
+</details>
+
+<details>
+<summary><strong>Grade 2 — Orthodox / Modern-Orthodox / Religious-Zionist</strong></summary>
+
+Acceptable to most Charedim but may draw community-specific objections from stricter poskim. Best treated as "ships with a note" rather than a blocker.
+
+- **Koren Publishers / Maggid Books** — Modern Orthodox flagship; strong Tanakh typesetting, widely respected. Some Charedim prefer Artscroll on stylistic grounds, but Koren is rarely rejected outright.
+- **OU Press** — Orthodox Union's publishing arm; MO-leaning but mainstream.
+- **Moznaim / Touger** — sits at the Charedi/MO boundary. The Touger Mishneh Torah is the de facto English Rambam; accepted by many Charedim, with some preferring Kehot's Yiddish/Hebrew editions.
+- **Yeshivat Har Bracha / Peninei Halakhah** — Religious Zionist/Dati Leumi flagship halacha work. Accepted in Religious Zionist communities, less commonly used in Charedi ones.
+- **Rav Kook / Mossad HaRav Kook** — Rav Kook's own writings and MHK-published works. Some Charedim reject Rav Kook himself on ideological grounds; stricter communities may want these cut.
+- **Sefaria's own "Miqra According to the Masorah" Tanakh** — a careful scholarly Public Domain edition of the masoretic text. Safe default for Hebrew Tanakh on the tablet.
+
+</details>
+
+<details>
+<summary><strong>Grade 3 — Academic-Orthodox / uneven quality</strong></summary>
+
+Tolerated by some Charedim, rejected by many. These are legally ship-safe but culturally loaded — this bucket contains the single biggest content-policy decision for the project.
+
+- **William Davidson Edition / Steinsaltz Talmud** — the most complete English Talmud translation in the world, but associated with Steinsaltz's academic-Orthodox circle. Strict Litvish and Chasidish communities often reject it on principle; Modern Orthodox and some Charedi educators accept it. Ships legally (CC-BY-NC-blocked for commercial use; see license codes), but when a CC-BY version exists, it's still culturally Grade 3.
+- **Soncino Press** — older English Talmud translation from the 1930s-50s; dated English, academic framing. Technically frum but now considered low-quality by most communities.
+- **Sefaria Community Translations** — crowd-sourced; quality varies wildly by volunteer. Some are excellent, some are unchecked.
+- **Wikisource** — public-domain crowd transcriptions; typographical quality uneven, no halachic vetting.
+
+**Strategic recommendation**: ship Grade-3 content under a user-toggleable setting, so strict-preference users can hide it without losing the core Hebrew library. Alternatively, commission replacement translations for the highest-value Grade-3 texts (primarily Davidson Talmud) if budget allows.
+
+</details>
+
+<details>
+<summary><strong>Grade 4 — Non-Orthodox Jewish</strong></summary>
+
+Rejected by the Charedi market. Their inclusion on a device sold to this audience would draw immediate objection and undermine rabbinic endorsement.
+
+- **Jewish Publication Society (JPS)** — the Conservative/academic mainstream Tanakh translation. JPS 1917 (PD) is more tolerated than the new JPS or the Gender-Sensitive edition, but none are standard in Charedi use.
+- **Reconstructionist / Reform Judaism / Union for Reform Judaism** — non-Orthodox movements, categorically rejected.
+- **JTS (Jewish Theological Seminary)** — Conservative rabbinical school publications.
+- **HUC (Hebrew Union College)** — Reform rabbinical school publications.
+
+Cut these from any Charedi-market build.
+
+</details>
+
+<details>
+<summary><strong>Grade 5 — Non-Jewish / critical academic</strong></summary>
+
+Christian translations, bible-criticism scholarship, and related materials that treat the text from a non-traditional framework. Very rare in the Sefaria corpus (only 2 versions), but worth flagging:
+
+- **Brenton Septuagint** and similar Christian Old Testament translations
+- **King James Version**, Douay-Rheims, New Testament references
+- Academic bible-criticism sources
+
+Cut unconditionally from a frum product.
+
+</details>
+
+<details>
+<summary><strong>Grade ? — Unmatched</strong></summary>
+
+~2,000+ versions could not be classified automatically because their publisher fingerprint didn't match any known imprint, translator, or source URL pattern. A version earning `?` is not necessarily problematic — it could easily be Grade 1 content lacking a publisher attribution, or a legitimate Chasidic translation from a small press our regex doesn't recognize. Treat `?` as a **manual-review flag**, not a rejection.
+
+Priority for Grade-? review should be titles that also land in AUDIT-NEEDED license status — those need both a content and legal pass at the same time.
+
+</details>
 
 ## License Status Codes
 
@@ -19026,32 +19099,44 @@ For each title, answers: "After filtering for ship-safe AND Charedi-acceptable, 
 
 ## Title Buckets
 
-| Bucket | Meaning | Titles |
-|---|---|---|
-| **CLEAN** | Has Grade 1-2, ship-safe English — works out of the box | 262 |
-| **COMPROMISE** | Only Grade-3 English ship-safe (Davidson/Steinsaltz/Sefaria community) — ship if rabbinic advisory OKs | 1232 |
-| **RESCUABLE** | Only "unknown license" English exists — fixable by legal audit | 123 |
-| **BLOCKED** | English exists but all of it is NC / copyright / Grade 4-5 — tablet ships Hebrew-only for this title | 232 |
-| **NO_ENGLISH** | No English translation exists in Sefaria at all — Hebrew-only by default | 4604 |
+Every Sefaria title was evaluated for *English* availability after applying both the license filter (ship-safe only) and the Charedi grade filter (1-2 preferred, 3 acceptable with rabbinic OK). Each title falls into one of five buckets:
+
+### CLEAN — 262 titles (4%)
+
+The title has at least one Grade 1-2 ship-safe English version. The tablet delivers a complete bilingual experience for these titles: user taps "English" and sees a frum-acceptable translation. This is the unambiguous win bucket.
+
+### COMPROMISE — 1,232 titles (19%)
+
+The only ship-safe English is Grade 3 — typically the **William Davidson Talmud**, Sefaria Community Translation, or Soncino. Legally fine to ship, but culturally loaded: strict Charedi poskim will object to Davidson Talmud specifically. The product choice here is binary:
+
+- Ship Davidson with rabbinic advisory sign-off and an optional "hide academic translations" toggle, OR
+- Commission replacement translations for headline titles (primarily Shas Bavli) — expensive but the single highest-leverage content investment.
+
+### RESCUABLE — 123 titles (2%)
+
+The only English version(s) have a blank or "unknown" license. A lawyer clearing the provenance on each would promote these into CLEAN or COMPROMISE. ~4-8 weeks of legal-paralegal work; relatively cheap upside.
+
+### BLOCKED — 232 titles (4%)
+
+English translations exist in Sefaria but **all** of them are either CC-BY-NC, under explicit copyright, or Grade 4-5 (non-Orthodox or Christian sources). The tablet ships Hebrew-only for these titles. If the user can't read the Hebrew comfortably, the title feels broken. Strategic response: either accept Hebrew-only (fine for an avreich audience, painful for a bachur), license individual works (e.g., Artscroll for key titles), or commission fresh translations.
+
+### NO_ENGLISH — 4,604 titles (71%)
+
+No English translation exists in Sefaria at all — nothing to filter, nothing to license, nothing to rescue. This is Sefaria's translation gap, not a licensing problem. Mostly obscure works, responsa, and Hebrew-only commentaries where English was never written. The tablet ships these Hebrew-only by default.
 
 ## Bucket x Category
 
-| Category | CLEAN | COMPROMISE | RESCUABLE | BLOCKED | NO_ENGLISH | Total |
-|---|---|---|---|---|---|---|
-| Halakhah | 4 | 198 | 36 | 27 | 1820 | 2085 |
-| Talmud | 5 | 260 | 17 | 22 | 1418 | 1722 |
-| Mishnah | 128 | 146 | 24 | 29 | 757 | 1084 |
-| Tanakh | 106 | 237 | 15 | 38 | 231 | 627 |
-| Tosefta | 0 | 67 | 5 | 0 | 154 | 226 |
-| Jewish Thought | 5 | 60 | 3 | 31 | 39 | 138 |
-| Midrash | 0 | 45 | 2 | 3 | 79 | 129 |
-| Responsa | 2 | 42 | 9 | 13 | 35 | 101 |
-| Chasidut | 1 | 64 | 2 | 5 | 25 | 97 |
-| Kabbalah | 0 | 42 | 2 | 8 | 18 | 70 |
-| Liturgy | 9 | 26 | 5 | 15 | 11 | 66 |
-| Second Temple | 0 | 15 | 2 | 35 | 0 | 52 |
-| Musar | 1 | 24 | 1 | 6 | 9 | 41 |
-| Reference | 1 | 6 | 0 | 0 | 8 | 15 |
+How the five buckets distribute across Sefaria's top-level categories (paraphrased — filter the master browser above for the interactive view):
+
+- **Halakhah** (2,085 titles) — 4 CLEAN, 198 COMPROMISE, 36 RESCUABLE, 27 BLOCKED, **1,820 NO_ENGLISH**. Halacha is overwhelmingly untranslated territory. The English corpus is thin but where it exists, quality varies.
+- **Talmud** (1,722 titles) — 5 CLEAN, **260 COMPROMISE** (mostly Davidson), 17 RESCUABLE, 22 BLOCKED, 1,418 NO_ENGLISH. Davidson dominates what English exists; licensing Artscroll Shas would be transformative.
+- **Mishnah** (1,084 titles) — **128 CLEAN**, 146 COMPROMISE, 24 RESCUABLE, 29 BLOCKED, 757 NO_ENGLISH. Better English coverage than Talmud; Bartenura translations carry much of it.
+- **Tanakh** (627 titles) — 106 CLEAN, **237 COMPROMISE**, 15 RESCUABLE, 38 BLOCKED, 231 NO_ENGLISH. COMPROMISE here is mostly JPS-tier — arguably Grade 4 rather than 3. Koren offers a clean Grade-2 path if licensed.
+- **Tosefta** (226 titles) — 0 CLEAN, 67 COMPROMISE, 5 RESCUABLE, 0 BLOCKED, 154 NO_ENGLISH. No clean English exists for any Tosefta tractate.
+- **Jewish Thought** (138) — 5/60/3/31/39. Heavy BLOCKED ratio because most modern Jewish thought translations are Grade 3-4.
+- **Midrash** (129), **Responsa** (101), **Chasidut** (97), **Kabbalah** (70), **Liturgy** (66), **Second Temple** (52), **Musar** (41), **Reference** (15) — all tail categories, mostly NO_ENGLISH or COMPROMISE.
+
+**Pattern**: the deeper into the learning corpus you go, the worse English coverage gets. Basics (Chumash, Mishnah) have real coverage; backbone learning texts (Shas, Halacha) mostly depend on NC-blocked or Grade-3 translations; advanced material (Responsa, Tosefta, most Kabbalah) has no English at all. This drives a two-mode product thesis: a baseline "bilingual entry tier" for beginners is feasible today; a "full-corpus shas/halacha" tier requires commissioned or licensed translations.
 
 ## Strategic Read
 

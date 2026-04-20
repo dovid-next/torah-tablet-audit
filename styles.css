@@ -68,6 +68,44 @@ blockquote {
 #notes { color: var(--muted); font-size: 1.35rem; }
 .notes-intro { font-size: 14px; margin-bottom: 1.5em; }
 
+/* Collapsible details blocks in the notes */
+details {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6em 0.9em;
+  margin: 0.4em 0;
+  background: white;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+details + details { margin-top: 0.4em; }
+details summary {
+  cursor: pointer;
+  list-style: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.1rem;
+  color: #222;
+  padding: 0.1em 0;
+  position: relative;
+  padding-left: 1.4em;
+  user-select: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details summary::before {
+  content: "▸";
+  position: absolute;
+  left: 0.3em;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  transition: transform 0.15s;
+  font-size: 0.9em;
+}
+details[open] > summary::before {
+  transform: translateY(-50%) rotate(90deg);
+}
+details summary:hover { color: var(--accent); }
+details > *:not(summary) { margin-top: 0.5em; }
+
 /* ================================================================
    2. Master browser
    ================================================================ */
