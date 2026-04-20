@@ -58,9 +58,25 @@ blockquote {
 }
 
 /* Tables */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1em 0;
+  border-radius: 4px;
+  /* Subtle fade at right edge to hint at horizontal scroll */
+  background:
+    linear-gradient(to right, var(--bg), var(--bg)),
+    linear-gradient(to right, var(--bg), rgba(250,250,247,0)),
+    linear-gradient(to right, rgba(0,0,0,0.08), rgba(0,0,0,0)),
+    linear-gradient(to left, rgba(0,0,0,0.08), rgba(0,0,0,0));
+  background-position: left center, right center, left center, right center;
+  background-repeat: no-repeat;
+  background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
 table {
   border-collapse: collapse;
-  margin: 1em 0;
+  margin: 0;
   width: 100%;
   font-size: 13.5px;
   background: white;
@@ -277,6 +293,16 @@ tr.hidden-by-filter { display: none; }
 
   /* Tables: slightly tighter but still readable */
   table { font-size: 12.5px; }
-  th, td { padding: 5px 7px; }
+  th, td { padding: 5px 7px; white-space: nowrap; }
   th { padding-right: 18px; }
+  /* On mobile the scroll wrapper has extended fade hint */
+  .table-scroll::after {
+    content: "swipe →";
+    position: sticky;
+    right: 4px;
+    bottom: 4px;
+    font-size: 10px;
+    color: var(--muted);
+    opacity: 0.5;
+  }
 }

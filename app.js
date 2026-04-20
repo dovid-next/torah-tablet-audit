@@ -220,6 +220,15 @@
         rows.forEach(function(r) { tbody.appendChild(r); });
       });
     });
+
+    // ============== WRAP TABLE IN HORIZONTAL SCROLLER ==============
+    // Done last so facet bar and filter input stay OUTSIDE the scrolling area.
+    if (!table.parentElement.classList.contains('table-scroll')) {
+      var scrollWrap = document.createElement('div');
+      scrollWrap.className = 'table-scroll';
+      table.parentNode.insertBefore(scrollWrap, table);
+      scrollWrap.appendChild(table);
+    }
   });
 
   function escapeHtml(s) {
