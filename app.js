@@ -231,6 +231,31 @@
     }
   });
 
+  // ============== MOBILE TOOLTIP TAP BEHAVIOR ==============
+  // On touch devices (no hover), tapping a chip shows its tooltip; tapping elsewhere dismisses.
+  // Desktop continues to use CSS :hover from app.css.
+  var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.matchMedia('(max-width:720px)').matches;
+  if (isTouch) {
+    document.addEventListener('click', function(e) {
+      var chip = e.target.closest ? e.target.closest('.facet-chip[data-tip]') : null;
+      // Dismiss any previously shown tooltip
+      document.querySelectorAll('.facet-chip.show-tip').forEach(function(c) {
+        if (c !== chip) c.classList.remove('show-tip');
+      });
+      if (!chip) return;
+      // First tap → show tooltip AND prevent the toggle-filter action
+      if (!chip.classList.contains('show-tip')) {
+        chip.classList.add('show-tip');
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      // Second tap (tooltip already shown) → hide tooltip and allow the original click (filter toggle) to proceed normally
+      else {
+        chip.classList.remove('show-tip');
+      }
+    }, true);  // capture phase, so we intercept before the chip's own click handler
+  }
+
   function escapeHtml(s) {
     return s.replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];

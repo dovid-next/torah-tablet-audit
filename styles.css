@@ -305,4 +305,29 @@ tr.hidden-by-filter { display: none; }
     color: var(--muted);
     opacity: 0.5;
   }
+
+  /* Tooltips: pin to top of viewport, full-width, so they don't
+     overflow off-screen edges on narrow devices */
+  .facet-chip[data-tip].show-tip::before {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    transform: none;
+    bottom: auto;
+    max-width: none;
+    width: auto;
+    font-size: 13.5px;
+    padding: 12px 14px;
+    line-height: 1.5;
+    z-index: 1000;
+  }
+  .facet-chip[data-tip].show-tip::after {
+    /* Hide the arrow on mobile — tooltip is no longer attached to the chip */
+    display: none;
+  }
+  /* Suppress hover-only activation on touch devices; use .show-tip via JS tap */
+  .facet-chip[data-tip]:hover::before,
+  .facet-chip[data-tip]:hover::after { display: none; }
+  .facet-chip[data-tip].show-tip::before { display: block; content: attr(data-tip); }
 }
