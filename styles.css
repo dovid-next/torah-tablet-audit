@@ -132,27 +132,30 @@ tr:nth-child(even) td { background: #f7f6f1; }
 }
 #floating-toc a:hover { color: var(--accent); }
 
-/* Mobile TOC drawer toggle — hidden by default (desktop shows TOC inline) */
+/* TOC drawer toggle — prominent, fixed top-right on all screen sizes */
 #toc-toggle {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
-  bottom: 18px;
-  right: 18px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  top: 14px;
+  right: 14px;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
   background: var(--accent);
   color: white;
   border: none;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 600;
   cursor: pointer;
   z-index: 200;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
   font-family: inherit;
   line-height: 1;
 }
-#toc-toggle:hover { background: #1e4672; }
+#toc-toggle:hover { background: #1e4672; transform: scale(1.05); }
+#toc-toggle:active { transform: scale(0.97); }
 #toc-overlay {
   display: none;
   position: fixed;
@@ -162,27 +165,25 @@ tr:nth-child(even) td { background: #f7f6f1; }
 }
 #toc-overlay.visible { display: block; }
 
-@media (max-width: 1200px) {
-  #floating-toc { display: none; }
-  #toc-toggle { display: flex; align-items: center; justify-content: center; }
-  /* When open, TOC slides in as a right-side drawer */
-  #floating-toc.open {
-    display: block;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: min(340px, 90vw);
-    max-height: 100vh;
-    height: 100vh;
-    border-radius: 0;
-    border: none;
-    box-shadow: -4px 0 18px rgba(0,0,0,0.2);
-    z-index: 180;
-    overflow-y: auto;
-    padding: 1.2em 1.3em 2em;
-  }
-  body.toc-open { overflow: hidden; } /* lock scroll while drawer is open */
+/* Hide TOC by default; show as drawer on all sizes when opened */
+#floating-toc { display: none; }
+#floating-toc.open {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(360px, 92vw);
+  max-height: 100vh;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  box-shadow: -4px 0 18px rgba(0,0,0,0.2);
+  z-index: 180;
+  overflow-y: auto;
+  padding: 1.2em 1.3em 2em;
+  background: white;
 }
+body.toc-open { overflow: hidden; }
 
 /* Status badges inline */
 .emoji-wrap { font-size: 1.05em; }

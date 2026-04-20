@@ -157,6 +157,17 @@ REDUNDANT_SECTIONS = [
     'License Status X Category',
     'Charedi Grade x License Status',
     'Charedi Grade X License Status',
+    # Sections the user cut from the notes
+    '2. Core Seforim Checklist',
+    '3. Language Composition',
+    '4. Commentary Depth per Base Text',
+    '5. Cross-References',
+    '6. Search Corpus Size',
+    '7. Risk Register',
+    '9. Update & Support Model',
+    '10. Cost-Per-Unit Framework',
+    '4.2 Core Seforim — Level-1 Audit',
+    '4.2 Core Seforim - Level-1 Audit',
 ]
 def strip_h2_section(html, heading_text_fragment):
     # Match <h2 id="..."><...heading text...></h2> through to the next <h2 or <hr (part divider) or end.
