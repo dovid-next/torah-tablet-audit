@@ -131,15 +131,43 @@ html_body = markdown.markdown(
 )
 
 # ===== Strip all tables from markdown-rendered HTML (silently) =====
-# The Master Versions Browser (inserted at top) is the only live table.
-# Other tables in audit.md are redundant. Remove them cleanly — prose
-# around them serves as supporting context.
 stripped_count = [0]
 def _drop_table(m):
     stripped_count[0] += 1
     return ''
 html_body = re.sub(r'<table\b[^>]*>.*?</table>', _drop_table, html_body, flags=re.DOTALL)
 print(f'Stripped {stripped_count[0]} redundant tables from markdown content.')
+
+# ===== Strip redundant per-version / per-title bulk-list sections =====
+# These sections are raw dumps of filterable data — everything in them
+# is derivable from the master browser above. They add thousands of
+# unexplained bullets to the page. Keep only the analytical prose.
+REDUNDANT_SECTIONS = [
+    'CC-BY-NC Blocked Versions',
+    'Copyright-Blocked Versions',
+    'License Audit Needed',
+    'Unsure — Needs Manual Grade Review',
+    'Unsure - Needs Manual Grade Review',
+    'BLOCKED Titles',
+    'COMPROMISE Titles',
+    'NO_ENGLISH Titles',
+]
+def strip_h2_section(html, heading_text_fragment):
+    # Match <h2 id="..."><...heading text...></h2> through to the next <h2 or <hr (part divider) or end.
+    # heading_text_fragment is a plain substring to match inside the heading content.
+    pattern = re.compile(
+        r'<h2\b[^>]*>[^<]*?' + re.escape(heading_text_fragment) + r'[^<]*?</h2>.*?(?=<h2\b|<hr\b|$)',
+        re.DOTALL | re.IGNORECASE
+    )
+    return pattern.sub('', html)
+
+sections_removed = 0
+for frag in REDUNDANT_SECTIONS:
+    before = len(html_body)
+    html_body = strip_h2_section(html_body, frag)
+    if len(html_body) < before:
+        sections_removed += 1
+print(f'Stripped {sections_removed} redundant bulk-list sections from notes.')
 
 # CSS + JS loaded from external files
 css = open(os.path.join(HERE, 'styles.css'), encoding='utf-8').read() if os.path.exists(os.path.join(HERE,'styles.css')) else ''
