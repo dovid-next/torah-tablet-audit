@@ -297,15 +297,19 @@ tr.hidden-by-filter { display: none; }
 .facet-bar.collapsed .facet-toggle .caret { transform: rotate(-90deg); }
 .facet-bar.collapsed .facet-body { display: none; }
 
-/* Custom tooltip for facet chips (replaces native title) */
+/* Custom tooltip for facet chips (replaces native title).
+   Triggers: desktop :hover, or .show-tip class (added by JS on tap). */
 .facet-chip[data-tip] { position: relative; }
 .facet-chip[data-tip]:hover::before,
-.facet-chip[data-tip]:hover::after {
+.facet-chip[data-tip].show-tip::before,
+.facet-chip[data-tip]:hover::after,
+.facet-chip[data-tip].show-tip::after {
   pointer-events: none;
   position: absolute;
   z-index: 200;
 }
-.facet-chip[data-tip]:hover::before {
+.facet-chip[data-tip]:hover::before,
+.facet-chip[data-tip].show-tip::before {
   content: attr(data-tip);
   left: 50%;
   bottom: calc(100% + 8px);
@@ -325,7 +329,8 @@ tr.hidden-by-filter { display: none; }
   letter-spacing: 0;
   text-transform: none;
 }
-.facet-chip[data-tip]:hover::after {
+.facet-chip[data-tip]:hover::after,
+.facet-chip[data-tip].show-tip::after {
   content: "";
   left: 50%;
   bottom: calc(100% + 2px);
@@ -384,9 +389,13 @@ tr.hidden-by-filter { display: none; }
     opacity: 0.5;
   }
 
-  /* Tooltips: pin to top of viewport, full-width, so they don't
-     overflow off-screen edges on narrow devices */
+  /* Suppress phantom-hover tooltips from sticky touches */
+  .facet-chip[data-tip]:hover::before,
+  .facet-chip[data-tip]:hover::after { content: none; }
+
+  /* Tap-driven tooltip pins to top of viewport so it never clips off-screen */
   .facet-chip[data-tip].show-tip::before {
+    content: attr(data-tip);
     position: fixed;
     top: 12px;
     left: 12px;
@@ -399,13 +408,8 @@ tr.hidden-by-filter { display: none; }
     padding: 12px 14px;
     line-height: 1.5;
     z-index: 1000;
+    display: block;
   }
-  .facet-chip[data-tip].show-tip::after {
-    /* Hide the arrow on mobile — tooltip is no longer attached to the chip */
-    display: none;
-  }
-  /* Suppress hover-only activation on touch devices; use .show-tip via JS tap */
-  .facet-chip[data-tip]:hover::before,
-  .facet-chip[data-tip]:hover::after { display: none; }
-  .facet-chip[data-tip].show-tip::before { display: block; content: attr(data-tip); }
+  /* Hide arrow on mobile since tooltip is no longer attached to the chip */
+  .facet-chip[data-tip].show-tip::after { content: none; }
 }
