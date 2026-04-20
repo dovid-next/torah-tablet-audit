@@ -229,7 +229,7 @@ tr.hidden-by-filter { display: none; }
   line-height: 1.45;
   white-space: normal;
   width: max-content;
-  max-width: 340px;
+  max-width: 420px;
   box-shadow: 0 4px 14px rgba(0,0,0,0.25);
   text-align: left;
   letter-spacing: 0;
