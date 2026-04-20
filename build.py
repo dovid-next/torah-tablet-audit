@@ -90,32 +90,35 @@ if os.path.exists(VERSIONS_JSON) and os.path.exists(BOOKS_JSON):
                   'fr':'French','pt':'Portuguese','ru':'Russian','de':'German','pl':'Polish',
                   'fi':'Finnish','it':'Italian','ar':'Arabic','la':'Latin','nl':'Dutch',
                   'eo':'Esperanto','lld':'Ladino'}
-    rows_html = []
+    # Emit rows as JSON; app.js renders them on-demand when the user interacts.
+    # This avoids parsing ~11k <tr> elements at page load.
+    master_rows = []
     for v in versions:
         g, reason = grade(v); st = lstat(v.get('license',''))
         cat = title_to_cat.get(v['title'], ['?'])[0]
         lang_code = v.get('actualLanguage','') or v.get('language','') or '?'
         lang = LANG_LABEL.get(lang_code, lang_code or '?')
-        rows_html.append(
-            '<tr>' +
-            f'<td>{htmllib.escape(v["title"])}</td>' +
-            f'<td>{htmllib.escape(cat)}</td>' +
-            f'<td>{htmllib.escape(lang)}</td>' +
-            f'<td>{g}</td>' +
-            f'<td>{st}</td>' +
-            f'<td>{htmllib.escape(v.get("license","") or "(blank)")}</td>' +
-            f'<td>{htmllib.escape(reason)}</td>' +
-            f'<td>{htmllib.escape(v.get("versionTitle",""))}</td>' +
-            '</tr>'
-        )
+        master_rows.append([
+            v['title'],
+            cat,
+            lang,
+            str(g),
+            st,
+            v.get('license','') or '(blank)',
+            reason,
+            v.get('versionTitle',''),
+        ])
+    master_data_json = json.dumps(master_rows, ensure_ascii=False, separators=(',', ':'))
     master_table = (
         '<h2 id="master-browser">Master Versions Browser</h2>\n'
         f'<p>All {len(versions):,} text versions. Use facet chips above the table to filter by Grade, Status, Category, or Language. Click column headers to sort.</p>\n'
         '<p style="color:#666; font-size:13px;"><em>Common queries: click <code>BLOCKED-NC</code> to see all NC versions. Add <code>Talmud</code> to narrow. Click <code>AUDIT-NEEDED</code> + grade <code>?</code> for the priority audit pile.</em></p>\n'
-        '<table><thead><tr>'
+        '<table class="lazy-table" data-source="master-data">'
+        '<thead><tr>'
         '<th>Title</th><th>Category</th><th>Language</th><th>Grade</th>'
         '<th>Status</th><th>License</th><th>Publisher signal</th><th>Version title</th>'
-        '</tr></thead><tbody>\n' + '\n'.join(rows_html) + '\n</tbody></table>\n'
+        '</tr></thead><tbody></tbody></table>\n'
+        '<script id="master-data" type="application/json">' + master_data_json + '</script>\n'
     )
 
 html_body = markdown.markdown(

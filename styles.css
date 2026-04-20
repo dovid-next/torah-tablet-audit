@@ -216,6 +216,18 @@ table th:hover { background: #d7e4f1; }
 .table-filter:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
 tr.hidden-by-filter { display: none; }
 
+/* Lazy-table status line (shown above master browser) */
+.lazy-status {
+  background: var(--accent-soft);
+  border: 1px dashed var(--accent);
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin: 0.6em 0 0.2em 0;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+}
+
 /* Facet tag chips */
 .facet-bar {
   background: #f0ede3;

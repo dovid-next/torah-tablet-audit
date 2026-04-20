@@ -112,9 +112,22 @@
   }
 
   document.querySelectorAll('table').forEach(function(table) {
-    if (!table.tBodies.length || !table.tHead) return;
+    if (!table.tHead) return;
     var tbody = table.tBodies[0];
-    if (tbody.rows.length < 2) return;
+    var isLazy = table.classList.contains('lazy-table');
+    var lazyData = null;
+    var lazyRenderCap = 1000;  // safety cap on rows rendered at once
+
+    if (isLazy) {
+      var dataId = table.getAttribute('data-source');
+      var dataEl = document.getElementById(dataId);
+      if (!dataEl) return;
+      try { lazyData = JSON.parse(dataEl.textContent); } catch(e) { return; }
+      dataEl.remove(); // free the JSON text once parsed
+    } else {
+      if (!table.tBodies.length) return;
+      if (tbody.rows.length < 2) return;
+    }
 
     var headers = Array.from(table.tHead.rows[0].cells);
     var headerNames = headers.map(function(h){ return h.textContent.trim(); });
@@ -125,17 +138,26 @@
     headers.forEach(function(h, colIdx) {
       var values = {};
       var totalRows = 0;
-      Array.from(tbody.rows).forEach(function(r) {
-        var cell = r.cells[colIdx];
-        if (!cell) return;
-        var t = cell.textContent.trim();
-        if (t === '' || t === '—' || t === '-') return;
-        totalRows++;
-        values[t] = (values[t] || 0) + 1;
-      });
+      if (isLazy) {
+        lazyData.forEach(function(row) {
+          var t = (row[colIdx] || '').toString().trim();
+          if (t === '' || t === '—' || t === '-') return;
+          totalRows++;
+          values[t] = (values[t] || 0) + 1;
+        });
+      } else {
+        Array.from(tbody.rows).forEach(function(r) {
+          var cell = r.cells[colIdx];
+          if (!cell) return;
+          var t = cell.textContent.trim();
+          if (t === '' || t === '—' || t === '-') return;
+          totalRows++;
+          values[t] = (values[t] || 0) + 1;
+        });
+      }
       var uniqueCount = Object.keys(values).length;
-      // Heuristic: facetable if 2..15 unique values AND repeats exist (uniqueCount < totalRows)
-      if (uniqueCount >= 2 && uniqueCount <= 15 && uniqueCount < totalRows * 0.75) {
+      var cap = isLazy ? 30 : 15; // allow more facets on big lazy tables (esp. Category)
+      if (uniqueCount >= 2 && uniqueCount <= cap && uniqueCount < totalRows * 0.75) {
         facetableCols.push({colIdx: colIdx, name: headerNames[colIdx], values: values});
       }
     });
@@ -143,7 +165,81 @@
     // ============== BUILD FACET BAR ==============
     var activeFilters = {}; // colIdx -> Set of active values
     var filterBox;
+    var sortColIdx = null;
+    var sortAsc = true;
+    var statusEl; // shows "N of M matching — showing first 1000"
+
+    function anyFilterActive() {
+      if (filterBox && filterBox.value.trim()) return true;
+      return Object.keys(activeFilters).some(function(k){ return activeFilters[k] && activeFilters[k].size > 0; });
+    }
+
+    function rowMatchesFilters(vals, textQ) {
+      if (textQ) {
+        var joined = vals.join(' \u0001 ').toLowerCase();
+        if (joined.indexOf(textQ) === -1) return false;
+      }
+      for (var k in activeFilters) {
+        var set = activeFilters[k];
+        if (!set || set.size === 0) continue;
+        if (!set.has(vals[parseInt(k,10)])) return false;
+      }
+      return true;
+    }
+
+    function renderLazyRows() {
+      if (!isLazy) return;
+      var textQ = filterBox ? filterBox.value.toLowerCase().trim() : '';
+      // If no filters at all, show placeholder and render nothing
+      if (!anyFilterActive()) {
+        tbody.innerHTML = '';
+        if (statusEl) statusEl.textContent = 'Select a filter chip or type in the search box to view matching versions (' + lazyData.length.toLocaleString() + ' total).';
+        return;
+      }
+      // Filter
+      var matches = [];
+      for (var i = 0; i < lazyData.length; i++) {
+        if (rowMatchesFilters(lazyData[i], textQ)) matches.push(lazyData[i]);
+      }
+      // Sort
+      if (sortColIdx !== null) {
+        var numeric = matches.slice(0, 10).every(function(r){
+          var t = (r[sortColIdx] || '').toString().trim();
+          if (!t) return true;
+          return !isNaN(parseFloat(t.replace(/[,\s%]/g,'').replace(/\(.*?\)/g,'').replace(/[a-zA-Z]+$/,'')));
+        });
+        matches.sort(function(a,b){
+          var ta = (a[sortColIdx]||'').toString().trim();
+          var tb = (b[sortColIdx]||'').toString().trim();
+          if (numeric) {
+            var na = parseFloat(ta.replace(/[,\s%]/g,'').replace(/\(.*?\)/g,'').replace(/[a-zA-Z]+$/,'')) || 0;
+            var nb = parseFloat(tb.replace(/[,\s%]/g,'').replace(/\(.*?\)/g,'').replace(/[a-zA-Z]+$/,'')) || 0;
+            return sortAsc ? na-nb : nb-na;
+          }
+          return sortAsc ? ta.localeCompare(tb) : tb.localeCompare(ta);
+        });
+      }
+      // Render (capped)
+      var toRender = matches.slice(0, lazyRenderCap);
+      var html = '';
+      for (var j = 0; j < toRender.length; j++) {
+        var r = toRender[j];
+        html += '<tr>';
+        for (var k = 0; k < r.length; k++) html += '<td>' + escapeHtml(String(r[k] || '')) + '</td>';
+        html += '</tr>';
+      }
+      tbody.innerHTML = html;
+      if (statusEl) {
+        if (matches.length <= lazyRenderCap) {
+          statusEl.textContent = matches.length.toLocaleString() + ' matching versions.';
+        } else {
+          statusEl.textContent = matches.length.toLocaleString() + ' matching — showing first ' + lazyRenderCap.toLocaleString() + '. Narrow filters to see the rest.';
+        }
+      }
+    }
+
     function applyFilters() {
+      if (isLazy) { renderLazyRows(); return; }
       var textQ = filterBox ? filterBox.value.toLowerCase().trim() : '';
       Array.from(tbody.rows).forEach(function(row) {
         var hiddenByText = textQ && row.textContent.toLowerCase().indexOf(textQ) === -1;
@@ -251,12 +347,27 @@
     table.parentNode.insertBefore(filterBox, table);
     filterBox.addEventListener('input', applyFilters);
 
+    // ============== LAZY-TABLE STATUS / PLACEHOLDER ==============
+    if (isLazy) {
+      statusEl = document.createElement('div');
+      statusEl.className = 'lazy-status';
+      table.parentNode.insertBefore(statusEl, table);
+      renderLazyRows(); // shows initial placeholder text
+    }
+
     // ============== SORTING ==============
     headers.forEach(function(th, colIdx) {
       th.addEventListener('click', function() {
         var asc = !th.classList.contains('sort-asc');
         headers.forEach(function(h) { h.classList.remove('sort-asc','sort-desc'); });
         th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+
+        if (isLazy) {
+          sortColIdx = colIdx;
+          sortAsc = asc;
+          renderLazyRows();
+          return;
+        }
 
         var rows = Array.from(tbody.rows);
         var numeric = rows.slice(0, 10).every(function(r) {
