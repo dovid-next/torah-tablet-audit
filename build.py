@@ -151,6 +151,12 @@ REDUNDANT_SECTIONS = [
     'BLOCKED Titles',
     'COMPROMISE Titles',
     'NO_ENGLISH Titles',
+    # Empty headers — their tables were stripped above and the cross-tab is
+    # derivable by filtering the master browser.
+    'License Status x Category',
+    'License Status X Category',
+    'Charedi Grade x License Status',
+    'Charedi Grade X License Status',
 ]
 def strip_h2_section(html, heading_text_fragment):
     # Match <h2 id="..."><...heading text...></h2> through to the next <h2 or <hr (part divider) or end.
