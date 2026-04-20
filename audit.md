@@ -15,10 +15,41 @@ Generated from live Sefaria API on 2026-04-20. Covers 6453 unique titles across 
 
 ## License Status Codes
 
-- **SHIP-SAFE** — PD / CC0 / CC-BY / CC-BY-SA. Legally clean for commercial device.
-- **BLOCKED-NC** — CC-BY-NC / NC-SA. Cannot ship without licensing deal.
-- **BLOCKED-COPYRIGHT** — explicit copyright holder.
-- **AUDIT-NEEDED** — blank/unknown license field.
+Each text version in Sefaria is tagged with a license value in its metadata. These license values roll up to four status categories that govern whether and how the content can ship on a commercial tablet.
+
+### SHIP-SAFE
+
+License is **Public Domain**, **CC0**, **CC-BY**, or **CC-BY-SA**. Legally clean to include, redistribute, and sell with the content embedded. The core classical Jewish corpus (Gemara, Rashi, Tosafos, Rambam, Tur, Shulchan Aruch, Zohar, and virtually all Rishonim/Acharonim texts published before the 20th century) falls here — their copyrights expired long ago or never existed.
+
+For CC-BY and CC-BY-SA, you still owe attribution (a credits screen or about-page is sufficient). CC-BY-SA adds a "share-alike" requirement: if you make and distribute a derivative work, the derivative must use the same license. This does NOT infect unrelated parts of the product — you can still sell a tablet with CC-BY-SA content alongside proprietary code.
+
+### BLOCKED-NC
+
+License is **CC-BY-NC** or **CC-BY-NC-SA**. "NC" = NonCommercial. You can download, quote, or use these texts in a classroom for free. You cannot ship them on a product you sell for money — that is explicitly a commercial use and a license violation.
+
+This category is the single biggest strategic risk in the audit. 760+ versions fall here, concentrated in:
+
+- The **William Davidson Edition** of the Talmud (the Steinsaltz translation, ~186 versions across English, Hebrew, Aramaic, and vocalized Aramaic)
+- **Touger Mishneh Torah** (Moznaim) — ~86 versions
+- **JPS Tanakh** and **JPS Gender-Sensitive Edition** — ~116 versions
+- **Peninei Halakhah** (Yeshivat Har Bracha)
+- **Torat Emet** (Chasidic translations) — ~123 versions
+
+To use any of these commercially: (a) cut them from the build, (b) negotiate a direct licensing deal with the rights-holder, or (c) commission a replacement translation. Sefaria's upstream arrangement with these publishers does NOT transfer when a third party redistributes the data.
+
+### BLOCKED-COPYRIGHT
+
+License field names a specific copyright holder with all rights reserved — most commonly **Schocken** (11 versions; now a Penguin Random House imprint), **Chabad House Publications** (5), or **Steinsaltz Center** (2, separate from the Davidson edition).
+
+Sefaria displays these online under specific permissions that do NOT transfer to commercial redistribution. To ship: direct license agreement with the rights-holder, or cut. A Chabad partnership might unlock the Chabad-House ones; the underlying Kehot/Touger texts are already SHIP-SAFE anyway so the marginal value is limited. Schocken/Penguin Random House is unlikely to license a competing product.
+
+### AUDIT-NEEDED
+
+License field is blank or literally says "unknown" in Sefaria's metadata. This is the largest bucket — **~2,140 versions (18% of the library)**. Could be Public Domain (safe), could be CC-BY-NC (blocked), could just be a data-entry oversight.
+
+Treat as blocked until each is individually cleared. This is the primary legal-review bottleneck before shipping a first batch. Expect 4-8 weeks of paralegal/librarian work to get through it, potentially with help from Sefaria's legal team to close loops on items they digitized themselves.
+
+**A small number (~74 versions) have an entirely blank license field** — same practical status as "unknown" and rolled into this bucket.
 
 ## License Status x Category
 
