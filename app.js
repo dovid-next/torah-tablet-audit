@@ -1,4 +1,37 @@
 (function() {
+  // ============== MOBILE TOC DRAWER ==============
+  // Below 1200px the TOC is hidden by default. On narrow screens, add a
+  // floating button bottom-right that toggles the TOC as an overlay drawer.
+  var toc = document.getElementById('floating-toc');
+  if (toc) {
+    var tocBtn = document.createElement('button');
+    tocBtn.type = 'button';
+    tocBtn.id = 'toc-toggle';
+    tocBtn.setAttribute('aria-label', 'Toggle contents');
+    tocBtn.innerHTML = '<span>☰</span>';
+    document.body.appendChild(tocBtn);
+
+    var tocOverlay = document.createElement('div');
+    tocOverlay.id = 'toc-overlay';
+    document.body.appendChild(tocOverlay);
+
+    function closeTOC() {
+      toc.classList.remove('open');
+      tocOverlay.classList.remove('visible');
+      document.body.classList.remove('toc-open');
+    }
+    tocBtn.addEventListener('click', function() {
+      var isOpen = toc.classList.toggle('open');
+      tocOverlay.classList.toggle('visible', isOpen);
+      document.body.classList.toggle('toc-open', isOpen);
+    });
+    tocOverlay.addEventListener('click', closeTOC);
+    // Close drawer when a link inside is tapped
+    toc.addEventListener('click', function(e) {
+      if (e.target.tagName === 'A') closeTOC();
+    });
+  }
+
   // ============== TAG DESCRIPTIONS (hover tooltips) ==============
   // Keyed by lowercased chip value OR "columnName::value"
   var TAG_DESCRIPTIONS = {
