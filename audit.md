@@ -21654,7 +21654,7 @@ Appended 2026-04-20. Data pulled live from Sefaria API + GCS bucket HEAD samplin
 - **Grading**: regex-based publisher fingerprint (see Part 1). Unmatched versions flagged as Grade ?.
 - **Reproduction**: full scripts saved at `C:\Users\dbaze\AppData\Local\Temp\` (build_audit.py, coverage_gap.py, proposal_data.py).
 
-## 1. Storage Footprint (Estimated)
+## Storage Footprint (Estimated)
 
 Based on stratified sample of JSON files in Sefaria's GCS bucket, extrapolated to full population. These are raw JSON payload sizes — uncompressed, no indexes, no images, no app binary.
 
@@ -21874,7 +21874,7 @@ Actual figures depend on hardware RFP and rabbinic review scope — fill in base
 | Customer support reserve per unit | |
 | Margin | Target retail vs cost |
 
-## 12. Translator / Publisher Notes (Grade 1-2)
+## Translator / Publisher Notes (Grade 1-2)
 
 Which specific translators/publishers are represented in the CLEAN bucket, and why the Charedi market accepts them:
 
@@ -21912,7 +21912,7 @@ Top 20 Grade 1-2 ship-safe version titles (by version count):
 - **Moznaim / Touger** — sits at the Charedi/MO boundary; acceptance depends on specific title and the user's community.
 - **Vilna/Warsaw classical editions** — pre-20th-century print editions in the public domain. Universally accepted as the "correct" text.
 
-## 13. Sample User Journeys on a Ship-Safe-Only Device
+## Sample User Journeys on a Ship-Safe-Only Device
 
 Tracing what actually works when a user opens the tablet, assuming only Grade 1-2 ship-safe content is installed:
 
@@ -21945,7 +21945,7 @@ Tracing what actually works when a user opens the tablet, assuming only Grade 1-
 
 Generated 2026-04-20. Supersedes estimated figures in Part 3.
 
-## 4.1 Exact Storage Footprint
+## Exact Storage Footprint
 
 **Method:** Pulled complete object listing from `gs://sefaria-export/json/` via GCS JSON API — **19,643 files, 6.47 GB total on disk**. Matched each of our 11,573 classified versions to its exact file size via URL.
 
