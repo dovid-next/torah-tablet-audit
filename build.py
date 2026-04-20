@@ -127,6 +127,18 @@ html_body = markdown.markdown(
     extension_configs={'toc': {'permalink': False, 'toc_depth': '2-3'}},
 )
 
+# ===== Strip all tables from markdown-rendered HTML =====
+# The Master Versions Browser (inserted separately below) is the only live
+# table. Other tables in audit.md are redundant with it and have been
+# demoted to supporting prose — any numbers a reader needs are derivable
+# by filtering the master browser.
+stripped_count = [0]
+def _drop_table(m):
+    stripped_count[0] += 1
+    return '<p class="stripped-table-note"><em>[Table removed — filter the Master Versions Browser above for live data.]</em></p>'
+html_body = re.sub(r'<table\b[^>]*>.*?</table>', _drop_table, html_body, flags=re.DOTALL)
+print(f'Stripped {stripped_count[0]} redundant tables from markdown content.')
+
 # CSS + JS loaded from external files
 css = open(os.path.join(HERE, 'styles.css'), encoding='utf-8').read() if os.path.exists(os.path.join(HERE,'styles.css')) else ''
 js = open(os.path.join(HERE, 'app.js'), encoding='utf-8').read() if os.path.exists(os.path.join(HERE,'app.js')) else ''

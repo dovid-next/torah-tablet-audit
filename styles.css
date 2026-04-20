@@ -216,6 +216,16 @@ table th:hover { background: #d7e4f1; }
 .table-filter:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
 tr.hidden-by-filter { display: none; }
 
+/* Note left in place of stripped tables from audit.md */
+.stripped-table-note {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 4px 10px;
+  margin: 0.4em 0;
+  border-left: 2px solid var(--border);
+  background: rgba(0,0,0,0.02);
+}
+
 /* Lazy-table status line (shown above master browser) */
 .lazy-status {
   background: var(--accent-soft);
