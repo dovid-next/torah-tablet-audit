@@ -219,12 +219,13 @@
           return sortAsc ? ta.localeCompare(tb) : tb.localeCompare(ta);
         });
       }
-      // Render (capped). data-label on each cell enables card-layout on mobile.
+      // Render (capped). Rows start collapsed — only the title (first cell)
+      // is visible until the user taps the row to expand.
       var toRender = matches.slice(0, lazyRenderCap);
       var html = '';
       for (var j = 0; j < toRender.length; j++) {
         var r = toRender[j];
-        html += '<tr>';
+        html += '<tr class="collapsed">';
         for (var k = 0; k < r.length; k++) {
           html += '<td data-label="' + escapeHtml(headerNames[k] || '') + '">'
                + escapeHtml(String(r[k] || ''))
@@ -357,6 +358,13 @@
       statusEl.className = 'lazy-status';
       table.parentNode.insertBefore(statusEl, table);
       renderLazyRows(); // shows initial placeholder text
+
+      // Click any collapsed row to expand / collapse again
+      tbody.addEventListener('click', function(e) {
+        var tr = e.target.closest('tr');
+        if (!tr) return;
+        tr.classList.toggle('collapsed');
+      });
     }
 
     // ============== SORTING ==============

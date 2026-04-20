@@ -221,24 +221,58 @@ tr.hidden-by-filter { display: none; }
   margin: 1em 0 2em 0;
 }
 .browser-lead {
-  font-size: 15px;
-  color: #333;
-  margin: 0 0 0.8em 0;
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 0.5em 0;
 }
-/* Make the facet bar feel like the hero UI element */
+/* Compact facet bar */
 #browser .facet-bar {
   background: white;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.9em 1em;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  font-size: 13px;
+  border-radius: 6px;
+  padding: 0.5em 0.7em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  font-size: 11px;
 }
-#browser .facet-label { min-width: 110px; font-size: 11px; }
+#browser .facet-group { margin: 0.15em 0; gap: 3px; }
+#browser .facet-label {
+  min-width: 78px;
+  font-size: 9.5px;
+  margin-right: 4px;
+}
 #browser .facet-chip {
-  font-size: 12.5px;
-  padding: 4px 12px;
+  font-size: 10.5px;
+  padding: 1px 8px;
+  border-radius: 10px;
 }
+#browser .facet-chip .count { font-size: 9.5px; margin-left: 3px; }
+#browser .table-filter {
+  font-size: 12px;
+  padding: 4px 9px;
+  width: 260px;
+}
+
+/* Collapsed table rows — show only the first cell (title) until clicked */
+tr.collapsed { cursor: pointer; }
+tr.collapsed td:not(:first-child) { display: none; }
+tr.collapsed td:first-child::after {
+  content: " ▸";
+  color: var(--muted);
+  font-size: 11px;
+  margin-left: 4px;
+  opacity: 0.6;
+}
+tr:not(.collapsed) td:first-child { font-weight: 600; }
+tr:not(.collapsed) td:first-child::after {
+  content: " ▾";
+  color: var(--accent);
+  font-size: 11px;
+  margin-left: 4px;
+}
+tr:not(.collapsed) { cursor: pointer; }
+/* Tighter vertical spacing on collapsed rows */
+tr.collapsed td { padding-top: 4px; padding-bottom: 4px; }
+
 /* Style notes section so it feels secondary */
 #notes { color: var(--muted); font-size: 1.35rem; }
 .notes-intro { font-size: 14px; margin-bottom: 1.5em; }
@@ -393,19 +427,19 @@ tr.hidden-by-filter { display: none; }
   p, li { font-size: 14.5px; }
   hr { margin: 1.8rem 0; }
 
-  /* Bigger touch targets for chips and filter input */
+  /* Compact touch-friendly chips */
   .facet-chip {
-    padding: 7px 13px;
-    font-size: 12.5px;
-    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 11.5px;
+    border-radius: 12px;
   }
-  .facet-label { min-width: 0; display: block; margin-bottom: 3px; }
-  .facet-group { margin: 0.5em 0; gap: 6px; }
-  .facet-bar { padding: 0.7em 0.8em; }
+  .facet-label { min-width: 0; display: block; margin-bottom: 2px; font-size: 9.5px; }
+  .facet-group { margin: 0.3em 0; gap: 4px; }
+  .facet-bar { padding: 0.5em 0.65em; font-size: 11px; }
   .table-filter {
     width: 100%;
-    padding: 9px 12px;
-    font-size: 14px;
+    padding: 6px 10px;
+    font-size: 12.5px;
   }
   .facet-clear { font-size: 13px; padding: 6px 0; display: inline-block; }
 
@@ -457,6 +491,13 @@ tr.hidden-by-filter { display: none; }
     letter-spacing: 0.05em;
     margin-bottom: 2px;
   }
+
+  /* Collapsed cards: hide labels on the title cell; hide other cells entirely */
+  tr.collapsed { padding: 10px 12px; }
+  tr.collapsed td:first-child { padding: 0; }
+  tr.collapsed td:first-child::before { display: none; }  /* no "TITLE" label when collapsed */
+  tr.collapsed td:first-child { font-weight: 600; }
+  tr:not(.collapsed) td:first-child::before { display: block; }
   /* Note: only the Master Browser has data-label attrs. Static markdown
      tables (stripped in build.py) no longer render, so no special case. */
 
